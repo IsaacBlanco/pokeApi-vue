@@ -1,11 +1,14 @@
 <script setup>
-import {ref} from 'vue';
-import axios from 'axios';
 import {useRoute, useRouter} from 'vue-router'
 import { useGetData } from '@/composables/getData'
+import { useFavoritosStore } from '@/store/favoritos';
+import FavoritosView from './FavoritosView.vue';
 
 const route = useRoute();
 const router = useRouter();
+const useFavoritos = useFavoritosStore()
+
+const {addFavoritos, findPokemon} = useFavoritos
 const {data, getData, loading, error} = useGetData();
 
 const back = () => {
@@ -23,9 +26,10 @@ getData(`https://pokeapi.co/api/v2/pokemon/${route.params.name}`)
     <div v-if="data">
         <img :src ="data.sprites?.front_default">
         <h1>Pokemon: {{ $route.params.name }}</h1>
-        <button @click="back" class="btn btn-outline-primary">Volver</button>
+        <button class="btn btn-primary mb-2"
+        :disabled="findPokemon(data.name) ? true : false" 
+        @click="addFavoritos(data)"
+       >Agregar a Favoritos</button>
     </div>
-    <div v-else>
         <button @click="back" class="btn btn-outline-primary">Volver</button>
-    </div>
 </template>

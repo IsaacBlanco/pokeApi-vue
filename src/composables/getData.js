@@ -11,10 +11,8 @@ export const useGetData = () => {
     const getData = async (url) =>{
         try {
             const response = await axios.get(url)
-            console.log('axios repsonse', response)
             data.value = response.data
         } catch (e) {
-            //console.error(error)
             error.value = "Error de Servidor"
         }finally{
             loading.value = false
